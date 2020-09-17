@@ -24,15 +24,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    async function setNewCountry(newSearch: string) {
-      const newCountry: Country | undefined = state.data.Countries.find(
-        (country) => country.Country === newSearch
-      );
-      update({ type: "country set", selectedCountry: newCountry });
-      console.log(newCountry);
-    }
-    setNewCountry(state.search);
-  }, [state.data.Countries, state.search]);
+    const newCountry: Country | undefined = state.data.countries.find(
+      (country) => country.Country === state.search
+    );
+    update({ type: "country set", selectedCountry: newCountry });
+    console.log(newCountry);
+  }, [state.data.countries, state.search]);
 
   if (!state.data) return null;
 
@@ -43,7 +40,7 @@ function App() {
           void update({ type: "search set", search: search });
         }}
       />
-      {state.data.Global ? <GlobalWindow global={state.data.Global} /> : null}
+      {state.data.global ? <GlobalWindow global={state.data.global} /> : null}
       {state.selectedCountry ? (
         <CountryWindow country={state.selectedCountry} />
       ) : null}

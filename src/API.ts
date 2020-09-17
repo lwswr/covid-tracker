@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export type DataResponse = {
-  Global: Global | undefined;
-  Countries: Country[];
+  global: Global | undefined;
+  countries: Country[];
 };
 
 export type Global = {
