@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Country } from "./API";
 
-export const CountryWindow = (country: Country) => {
+export const CountryWindow = ({ country }: { country: Country }) => {
   return (
     <div>
       <h3>

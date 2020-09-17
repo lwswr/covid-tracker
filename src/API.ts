@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export type DataResponse = {
-  Global: Global;
+  Global: Global | undefined;
   Countries: Country[];
 };
 

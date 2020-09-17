@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Global } from "./API";
 
-export const GlobalWindow = (global: Global) => {
+export const GlobalWindow = ({ global }: { global: Global }) => {
   return (
     <div>
       <h3>

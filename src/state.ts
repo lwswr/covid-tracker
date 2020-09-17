@@ -1,10 +1,11 @@
 import React from "react";
-import { DataResponse } from "./API";
+import { DataResponse, Country } from "./API";
 import produce from "immer";
 
 export type State = {
-  data: DataResponse | undefined;
+  data: DataResponse;
   search: string;
+  selectedCountry: Country | undefined;
 };
 
 export type Events =
@@ -15,21 +16,19 @@ export type Events =
   | {
       type: "search set";
       search: string;
+    }
+  | {
+      type: "country set";
+      selectedCountry: Country | undefined;
     };
 
 export const initialState = (): State => ({
   data: {
-    Global: {
-      NewConfirmed: 0,
-      TotalConfirmed: 0,
-      NewDeaths: 0,
-      TotalDeaths: 0,
-      NewRecovered: 0,
-      TotalRecovered: 0,
-    },
+    Global: undefined,
     Countries: [],
   },
   search: "United Kingdom",
+  selectedCountry: undefined,
 });
 
 export const reducer: React.Reducer<State, Events> = (state, event) =>

@@ -1,7 +1,7 @@
 import React from "react";
 import { initialState, reducer } from "./state";
 import { useEffect } from "react";
-import { getData, DataResponse } from "./API";
+import { getData, DataResponse, Country } from "./API";
 import { SearchForm } from "./SearchForm";
 import { GlobalWindow } from "./GlobalWindow";
 import { CountryWindow } from "./CountryWindow";
@@ -19,14 +19,22 @@ function App() {
         console.log(error);
       }
     }
+
     getCovidData();
   }, []);
 
-  if (!state.data) return null;
+  useEffect(() => {
+    async function setNewCountry(newSearch: string) {
+      const newCountry: Country | undefined = state.data.Countries.find(
+        (country) => country.Country === newSearch
+      );
+      update({ type: "country set", selectedCountry: newCountry });
+      console.log(newCountry);
+    }
+    setNewCountry(state.search);
+  }, [state.data.Countries, state.search]);
 
-  const selectedCountry = state.data.Countries.find(
-    (country) => country.Country === state.search
-  );
+  if (!state.data) return null;
 
   return (
     <div className="App">
@@ -35,8 +43,11 @@ function App() {
           void update({ type: "search set", search: search });
         }}
       />
-      <GlobalWindow global={state.data.Global} />
-      <CountryWindow country={selectedCountry} />
+      {state.data.Global ? <GlobalWindow global={state.data.Global} /> : null}
+      {state.selectedCountry ? (
+        <CountryWindow country={state.selectedCountry} />
+      ) : null}
+      {console.log(state.selectedCountry)}
     </div>
   );
 }
