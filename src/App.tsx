@@ -14,37 +14,37 @@ function App() {
       try {
         const covidResponse: DataResponse = await getData();
         update({ type: "data fetched", data: covidResponse });
-        console.log(covidResponse);
       } catch (error) {
         console.log(error);
       }
     }
-
     getCovidData();
   }, []);
 
   useEffect(() => {
-    const newCountry: Country | undefined = state.data.countries.find(
-      (country) => country.Country === state.search
-    );
+    const findCountry = (countries: Country[], search: string) => {
+      return countries.find((country) => country.Country === search);
+    };
+    const newCountry = findCountry(state.data.Countries, state.search);
     update({ type: "country set", selectedCountry: newCountry });
-    console.log(newCountry);
-  }, [state.data.countries, state.search]);
+  }, [state.data.Countries, state.search]);
 
   if (!state.data) return null;
+
+  console.log(state.selectedCountry);
 
   return (
     <div className="App">
       <SearchForm
         submit={(search) => {
           void update({ type: "search set", search: search });
+          console.log(state.search);
         }}
       />
-      {state.data.global ? <GlobalWindow global={state.data.global} /> : null}
+      {state.data.Global ? <GlobalWindow global={state.data.Global} /> : null}
       {state.selectedCountry ? (
         <CountryWindow country={state.selectedCountry} />
       ) : null}
-      {console.log(state.selectedCountry)}
     </div>
   );
 }

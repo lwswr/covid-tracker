@@ -24,8 +24,8 @@ export type Events =
 
 export const initialState = (): State => ({
   data: {
-    global: undefined,
-    countries: [],
+    Global: undefined,
+    Countries: [],
   },
   search: "United Kingdom",
   selectedCountry: undefined,
