@@ -27,10 +27,9 @@ export type Country = {
   Date: string;
 };
 
-export const getData = () => {
-  return axios
-    .get<DataResponse>(`https://api.covid19api.com/summary`)
-    .then((response) => {
-      return response.data;
-    });
+export const getData = async () => {
+  const response = await axios.get<DataResponse>(
+    `https://api.covid19api.com/summary`
+  );
+  return response.data;
 };

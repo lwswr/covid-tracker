@@ -5,15 +5,15 @@ export const GlobalWindow = ({ global }: { global: Global }) => {
   return (
     <div>
       <h3>
-        Total Global Deaths: {global.TotalDeaths} <h4>+{global.NewDeaths}</h4>
+        Total Global Deaths: {global.TotalDeaths} <div>+{global.NewDeaths}</div>
       </h3>
       <h3>
         Total Global Cases: {global.TotalConfirmed}
-        <h4>+{global.NewConfirmed}</h4>
+        <div>+{global.NewConfirmed}</div>
       </h3>
       <h3>
         Total Global Recoveries: {global.TotalRecovered}
-        <h4>+{global.NewRecovered}</h4>
+        <div>+{global.NewRecovered}</div>
       </h3>
     </div>
   );
