@@ -1,9 +1,10 @@
 import React from "react";
-import { DataResponse, Country } from "./API";
+import { DataResponse, Country, Global } from "./API";
 import produce from "immer";
 
 export type State = {
-  data: DataResponse;
+  countries: Country[]
+  global: undefined | Global;
   search: string;
   selectedCountry: Country | undefined;
 };
@@ -14,32 +15,31 @@ export type Events =
       data: DataResponse;
     }
   | {
-      type: "search set";
+      type: "search updated";
       search: string;
     }
-  | {
-      type: "country set";
-      selectedCountry: Country | undefined;
-    };
 
 export const initialState = (): State => ({
-  data: {
-    Global: undefined,
-    Countries: [],
-  },
-  search: "United Kingdom",
+  countries: [],
+  global: undefined,
+  search: "",
   selectedCountry: undefined,
 });
 
 export const reducer: React.Reducer<State, Events> = (state, event) =>
   produce(state, (draft) => {
-    switch (event?.type) {
+    switch (event.type) {
       case "data fetched": {
-        draft.data = event.data;
+        draft.countries = event.data.Countries
+        draft.global = event.data.Global
         break;
       }
-      case "search set": {
+      case "search updated": {
         draft.search = event.search;
+        const matchedCountry = draft.countries.find(country => country.Country.toLowerCase() === event.search.toLowerCase())
+        if(matchedCountry) {
+          draft.selectedCountry = matchedCountry
+        }
       }
     }
   });
