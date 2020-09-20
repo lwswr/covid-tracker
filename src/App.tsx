@@ -9,6 +9,8 @@ import { CountryWindow } from "./CountryWindow";
 function App() {
   const [state, update] = React.useReducer(reducer, initialState());
 
+  useEffect(() => console.log(state), [state])
+
   useEffect(() => {
     async function getCovidData() {
       try {
@@ -21,27 +23,17 @@ function App() {
     getCovidData();
   }, []);
 
-  useEffect(() => {
-    const findCountry = (countries: Country[], search: string) => {
-      return countries.find((country) => country.Country === search);
-    };
-    const newCountry = findCountry(state.data.Countries, state.search);
-    update({ type: "country set", selectedCountry: newCountry });
-  }, [state.data.Countries, state.search]);
 
-  if (!state.data) return null;
-
-  console.log(state.selectedCountry);
+  if (!state.global) return <div>loading...</div>
 
   return (
     <div className="App">
       <SearchForm
-        submit={(search) => {
-          void update({ type: "search set", search: search });
-          console.log(state.search);
-        }}
+        submit={(search) => 
+          void update({ type: "search updated", search: search })
+        }
       />
-      {state.data.Global ? <GlobalWindow global={state.data.Global} /> : null}
+      {state.selectedCountry ? <GlobalWindow global={state.selectedCountry} /> : null}
       {state.selectedCountry ? (
         <CountryWindow country={state.selectedCountry} />
       ) : null}
