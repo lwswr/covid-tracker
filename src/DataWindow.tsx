@@ -9,6 +9,8 @@ const Container = styled.div`
   align-items: left;
   border: 1px solid grey;
   border-radius: 15px;
+  padding: 10px;
+  margin-bottom: 10px;
 `;
 
 const DataWindowCon = styled.div`
