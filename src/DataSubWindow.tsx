@@ -23,7 +23,7 @@ export const DataSubWindow = ({
     <SubWindow>
       <h6>{title}</h6>
       <h3>{total}</h3>
-      <h4>{increase}</h4>
+      <h4>+{increase}</h4>
     </SubWindow>
   );
 };

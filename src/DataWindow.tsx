@@ -18,6 +18,8 @@ const DataWindowCon = styled.div`
   flex-direction: row;
 `;
 
+const titles: string[] = ["Cases", "Deaths", "Recoveries"];
+
 export const DataWindow = ({
   title,
   data,
@@ -30,17 +32,17 @@ export const DataWindow = ({
       <h2>{title}</h2>
       <DataWindowCon>
         <DataSubWindow
-          title={"Cases"}
+          title={titles[0]}
           total={data?.TotalConfirmed}
           increase={data?.NewConfirmed}
         />
         <DataSubWindow
-          title={"Deaths"}
+          title={titles[1]}
           total={data?.TotalDeaths}
           increase={data?.NewDeaths}
         />
         <DataSubWindow
-          title={"Recoveries"}
+          title={titles[2]}
           total={data?.TotalRecovered}
           increase={data?.NewRecovered}
         />

@@ -5,6 +5,7 @@ import { getData, DataResponse } from "./API";
 import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
+import { MostNewCases } from "./MostNewCases";
 
 const AllData = styled.div`
   display: flex;
@@ -30,6 +31,14 @@ function App() {
     getCovidData();
   }, []);
 
+  const highestCountriesByNewCases = React.useMemo(() => {
+    return state.countries
+      ? state.countries.slice(0).sort((a, b) => {
+          return b.NewConfirmed - a.NewConfirmed;
+        })
+      : [];
+  }, [state.countries]);
+
   if (!state.global) return <div>loading...</div>;
 
   return (
@@ -49,6 +58,7 @@ function App() {
             data={state.selectedCountry}
           />
         ) : null}
+        <MostNewCases countries={highestCountriesByNewCases} />
       </AllData>
     </div>
   );
