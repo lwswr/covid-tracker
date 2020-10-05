@@ -1,11 +1,12 @@
 import React from "react";
 import { initialState, reducer } from "./state";
 import { useEffect } from "react";
-import { getData, DataResponse } from "./API";
+import { getData, DataResponse, Country } from "./API";
 import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
 import { MostNewCases } from "./MostNewCases";
+import { MostNewDeaths } from "./MostNewDeaths";
 
 const AllData = styled.div`
   display: flex;
@@ -39,7 +40,31 @@ function App() {
       : [];
   }, [state.countries]);
 
-  if (!state.global) return <div>loading...</div>;
+  const highestCountriesByNewDeaths = React.useMemo(() => {
+    return state.countries
+      ? state.countries.slice(0).sort((a, b) => {
+          return b.NewDeaths - a.NewDeaths;
+        })
+      : [];
+  }, [state.countries]);
+
+  // function pluck<T, K extends keyof T>(o: T, propertyNames: K[]): T[K][] {
+  //   return propertyNames.map((n) => o[n]);
+  // }
+
+  function sortArray<T, K extends keyof T>(array: T, key: K[]): T[K][] {
+    return array.slice(0).sort((a, b) => {
+      return b[key] - a[key];
+    });
+  }
+
+  const sortedNewConfirmed: Country[] = sortArray(
+    state.countries,
+    "NewConfirmed"
+  );
+  console.log(sortedNewConfirmed);
+
+  if (!state.global || !state.countries) return <div>loading...</div>;
 
   return (
     <div className="App">
@@ -59,6 +84,7 @@ function App() {
           />
         ) : null}
         <MostNewCases countries={highestCountriesByNewCases} />
+        <MostNewDeaths countries={highestCountriesByNewDeaths} />
       </AllData>
     </div>
   );
