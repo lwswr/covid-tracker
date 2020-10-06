@@ -1,7 +1,7 @@
 import React from "react";
 import { initialState, reducer } from "./state";
 import { useEffect } from "react";
-import { getData, DataResponse, Country } from "./API";
+import { getData, DataResponse } from "./API";
 import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
@@ -47,22 +47,6 @@ function App() {
         })
       : [];
   }, [state.countries]);
-
-  // function pluck<T, K extends keyof T>(o: T, propertyNames: K[]): T[K][] {
-  //   return propertyNames.map((n) => o[n]);
-  // }
-
-  function sortArray<T, K extends keyof T>(array: T, key: K[]): T[K][] {
-    return array.slice(0).sort((a, b) => {
-      return b[key] - a[key];
-    });
-  }
-
-  const sortedNewConfirmed: Country[] = sortArray(
-    state.countries,
-    "NewConfirmed"
-  );
-  console.log(sortedNewConfirmed);
 
   if (!state.global || !state.countries) return <div>loading...</div>;
 
