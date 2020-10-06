@@ -48,6 +48,38 @@ function App() {
       : [];
   }, [state.countries]);
 
+  const highestCountriesByNewRecoveries = React.useMemo(() => {
+    return state.countries
+      ? state.countries.slice(0).sort((a, b) => {
+          return b.NewDeaths - a.NewRecovered;
+        })
+      : [];
+  }, [state.countries]);
+
+  const highestCountriesByTotalCases = React.useMemo(() => {
+    return state.countries
+      ? state.countries.slice(0).sort((a, b) => {
+          return b.TotalConfirmed - a.TotalConfirmed;
+        })
+      : [];
+  }, [state.countries]);
+
+  const highestCountriesByTotalDeaths = React.useMemo(() => {
+    return state.countries
+      ? state.countries.slice(0).sort((a, b) => {
+          return b.TotalDeaths - a.TotalDeaths;
+        })
+      : [];
+  }, [state.countries]);
+
+  const highestCountriesByTotalRecoveries = React.useMemo(() => {
+    return state.countries
+      ? state.countries.slice(0).sort((a, b) => {
+          return b.TotalRecovered - a.TotalRecovered;
+        })
+      : [];
+  }, [state.countries]);
+
   if (!state.global || !state.countries) return <div>loading...</div>;
 
   return (
