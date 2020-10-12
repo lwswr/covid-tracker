@@ -5,7 +5,7 @@ export const SearchForm = ({
 }: {
   submit: (search: string) => void;
 }) => {
-  const [newSearch, setNewSearch] = React.useState("");
+  const [newSearch, setNewSearch] = React.useState("united kingdom");
   return (
     <div>
       <form

@@ -1,11 +1,11 @@
 import React from "react";
 import { initialState, reducer } from "./state";
 import { useEffect } from "react";
-import { getData, DataResponse } from "./API";
+import { getData, DataResponse, Country } from "./API";
 import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
-import { MostNewCases } from "./MostNewCases";
+import { MostNewConfirmed } from "./MostNewConfirmed";
 import { MostNewDeaths } from "./MostNewDeaths";
 
 const AllData = styled.div`
@@ -32,53 +32,53 @@ function App() {
     getCovidData();
   }, []);
 
-  const highestCountriesByNewCases = React.useMemo(() => {
-    return state.countries
-      ? state.countries.slice(0).sort((a, b) => {
-          return b.NewConfirmed - a.NewConfirmed;
-        })
-      : [];
-  }, [state.countries]);
+  const sortCountries = (
+    countries: Country[],
+    key:
+      | "NewConfirmed"
+      | "NewDeaths"
+      | "NewRecovered"
+      | "TotalDeaths"
+      | "TotalConfirmed"
+      | "TotalRecovered"
+  ) => {
+    return countries
+      .slice(0)
+      .sort((a, b) => {
+        return b[key] - a[key];
+      })
+      .slice(0, 5);
+  };
 
-  const highestCountriesByNewDeaths = React.useMemo(() => {
-    return state.countries
-      ? state.countries.slice(0).sort((a, b) => {
-          return b.NewDeaths - a.NewDeaths;
-        })
-      : [];
-  }, [state.countries]);
+  const highestCountriesByNewConfirmed = sortCountries(
+    state.countries,
+    "NewConfirmed"
+  );
 
-  const highestCountriesByNewRecoveries = React.useMemo(() => {
-    return state.countries
-      ? state.countries.slice(0).sort((a, b) => {
-          return b.NewDeaths - a.NewRecovered;
-        })
-      : [];
-  }, [state.countries]);
+  const highestCountriesByNewDeaths = sortCountries(
+    state.countries,
+    "NewDeaths"
+  );
 
-  const highestCountriesByTotalCases = React.useMemo(() => {
-    return state.countries
-      ? state.countries.slice(0).sort((a, b) => {
-          return b.TotalConfirmed - a.TotalConfirmed;
-        })
-      : [];
-  }, [state.countries]);
+  const highestCountriesByNewRecoveries = sortCountries(
+    state.countries,
+    "NewRecovered"
+  );
 
-  const highestCountriesByTotalDeaths = React.useMemo(() => {
-    return state.countries
-      ? state.countries.slice(0).sort((a, b) => {
-          return b.TotalDeaths - a.TotalDeaths;
-        })
-      : [];
-  }, [state.countries]);
+  const highestCountriesByTotalConfirmed = sortCountries(
+    state.countries,
+    "TotalConfirmed"
+  );
 
-  const highestCountriesByTotalRecoveries = React.useMemo(() => {
-    return state.countries
-      ? state.countries.slice(0).sort((a, b) => {
-          return b.TotalRecovered - a.TotalRecovered;
-        })
-      : [];
-  }, [state.countries]);
+  const highestCountriesByTotalDeaths = sortCountries(
+    state.countries,
+    "TotalDeaths"
+  );
+
+  const highestCountriesByTotalRecoveries = sortCountries(
+    state.countries,
+    "TotalRecovered"
+  );
 
   if (!state.global || !state.countries) return <div>loading...</div>;
 
@@ -99,7 +99,7 @@ function App() {
             data={state.selectedCountry}
           />
         ) : null}
-        <MostNewCases countries={highestCountriesByNewCases} />
+        <MostNewConfirmed countries={highestCountriesByNewConfirmed} />
         <MostNewDeaths countries={highestCountriesByNewDeaths} />
       </AllData>
     </div>

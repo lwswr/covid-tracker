@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Country } from "./API";
 
-export const MostNewCases = ({ countries }: { countries: Country[] }) => {
+export const MostNewConfirmed = ({ countries }: { countries: Country[] }) => {
   return (
     <div>
       <ol>
