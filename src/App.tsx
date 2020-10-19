@@ -1,12 +1,12 @@
 import React from "react";
-import { initialState, reducer } from "./state";
+import { initialState, options, reducer } from "./state";
 import { useEffect } from "react";
 import { getData, DataResponse, Country } from "./API";
 import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
-import { MostNewConfirmed } from "./MostNewConfirmed";
-import { MostNewDeaths } from "./MostNewDeaths";
+// import { MostNewConfirmed } from "./MostNewConfirmed";
+// import { MostNewDeaths } from "./MostNewDeaths";
 
 const AllData = styled.div`
   display: flex;
@@ -99,8 +99,8 @@ function App() {
             data={state.selectedCountry}
           />
         ) : null}
-        <MostNewConfirmed countries={highestCountriesByNewConfirmed} />
-        <MostNewDeaths countries={highestCountriesByNewDeaths} />
+        {/* <MostNewConfirmed countries={highestCountriesByNewConfirmed} />
+        <MostNewDeaths countries={highestCountriesByNewDeaths} /> */}
       </AllData>
     </div>
   );

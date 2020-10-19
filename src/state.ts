@@ -2,15 +2,15 @@ import React from "react";
 import { DataResponse, Country, Global } from "./API";
 import produce from "immer";
 
-export const highestList = ["Cases", "Deaths", "Recoveries"] as const;
-export type highestListType = typeof highestList[number];
+export const options = ["Cases", "Deaths", "Recoveries"] as const;
+export type OptionsType = typeof options[number];
 
 export type State = {
   countries: Country[];
   global: undefined | Global;
   search: string;
   selectedCountry: Country | undefined;
-  highestList: highestListType;
+  options: OptionsType;
 };
 
 export type Events =
@@ -23,8 +23,8 @@ export type Events =
       search: string;
     }
   | {
-      type: "highest list updated";
-      highestList: highestListType;
+      type: "options list changed";
+      options: OptionsType;
     };
 
 export const initialState = (): State => ({
@@ -32,7 +32,7 @@ export const initialState = (): State => ({
   global: undefined,
   search: "united kingdom",
   selectedCountry: undefined,
-  highestList: "Cases",
+  options: "Cases",
 });
 
 export const reducer: React.Reducer<State, Events> = (state, event) =>
@@ -54,8 +54,9 @@ export const reducer: React.Reducer<State, Events> = (state, event) =>
         }
         break;
       }
-      case "highest list updated": {
-        draft.highestList = event.highestList;
+      case "options list changed": {
+        draft.options = event.options;
+        break;
       }
     }
   });
