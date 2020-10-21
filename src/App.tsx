@@ -7,8 +7,6 @@ import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
 import { Selector } from "./Selector";
 import { List } from "./List";
-// import { MostNewConfirmed } from "./MostNewConfirmed";
-// import { MostNewDeaths } from "./MostNewDeaths";
 
 const AllData = styled.div`
   display: flex;
