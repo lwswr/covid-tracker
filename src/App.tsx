@@ -42,7 +42,7 @@ function App() {
       .slice(0, 5);
   };
 
-  const getList = (selectedList: string) => {
+  const getDisplayKey = (selectedList: string) => {
     if (selectedList === "Cases") {
       return "TotalConfirmed";
     } else if (selectedList === "Deaths") {
@@ -51,10 +51,17 @@ function App() {
     return "TotalRecovered";
   };
 
+  const getSecondaryDisplayKey = (selectedList: string) => {
+    if (selectedList === "Cases") {
+      return "NewConfirmed";
+    } else if (selectedList === "Deaths") {
+      return "NewDeaths";
+    }
+    return "NewRecovered";
+  };
+
   if (!state.global || !state.countries || !state.selectedList)
     return <div>loading...</div>;
-
-  console.log(getList(state.selectedList));
 
   return (
     <div className="App">
@@ -81,8 +88,12 @@ function App() {
           value={state.selectedList}
         />
         <List
-          list={sortCountries(state.countries, getList(state.selectedList))}
-          displayKey={getList(state.selectedList)}
+          list={sortCountries(
+            state.countries,
+            getDisplayKey(state.selectedList)
+          )}
+          displayKey={getDisplayKey(state.selectedList)}
+          secondaryDisplayKey={getSecondaryDisplayKey(state.selectedList)}
         />
       </AllData>
     </div>
