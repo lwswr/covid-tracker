@@ -54,6 +54,8 @@ function App() {
   if (!state.global || !state.countries || !state.selectedList)
     return <div>loading...</div>;
 
+  console.log(getList(state.selectedList));
+
   return (
     <div className="App">
       <SearchForm
@@ -80,7 +82,7 @@ function App() {
         />
         <List
           list={sortCountries(state.countries, getList(state.selectedList))}
-          key={getList(state.selectedList)}
+          displayKey={getList(state.selectedList)}
         />
       </AllData>
     </div>
