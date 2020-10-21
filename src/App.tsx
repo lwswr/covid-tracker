@@ -1,10 +1,12 @@
 import React from "react";
-import { initialState, options, reducer } from "./state";
+import { initialState, reducer } from "./state";
 import { useEffect } from "react";
 import { getData, DataResponse, Country } from "./API";
 import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import styled from "styled-components";
+import { Selector } from "./Selector";
+import { List } from "./List";
 // import { MostNewConfirmed } from "./MostNewConfirmed";
 // import { MostNewDeaths } from "./MostNewDeaths";
 
@@ -17,8 +19,6 @@ const AllData = styled.div`
 
 function App() {
   const [state, update] = React.useReducer(reducer, initialState());
-
-  useEffect(() => console.log(state), [state]);
 
   useEffect(() => {
     async function getCovidData() {
@@ -34,13 +34,7 @@ function App() {
 
   const sortCountries = (
     countries: Country[],
-    key:
-      | "NewConfirmed"
-      | "NewDeaths"
-      | "NewRecovered"
-      | "TotalDeaths"
-      | "TotalConfirmed"
-      | "TotalRecovered"
+    key: "TotalDeaths" | "TotalConfirmed" | "TotalRecovered"
   ) => {
     return countries
       .slice(0)
@@ -50,37 +44,17 @@ function App() {
       .slice(0, 5);
   };
 
-  const highestCountriesByNewConfirmed = sortCountries(
-    state.countries,
-    "NewConfirmed"
-  );
+  const getList = (selectedList: string) => {
+    if (selectedList === "Cases") {
+      return "TotalConfirmed";
+    } else if (selectedList === "Deaths") {
+      return "TotalDeaths";
+    }
+    return "TotalRecovered";
+  };
 
-  const highestCountriesByNewDeaths = sortCountries(
-    state.countries,
-    "NewDeaths"
-  );
-
-  const highestCountriesByNewRecoveries = sortCountries(
-    state.countries,
-    "NewRecovered"
-  );
-
-  const highestCountriesByTotalConfirmed = sortCountries(
-    state.countries,
-    "TotalConfirmed"
-  );
-
-  const highestCountriesByTotalDeaths = sortCountries(
-    state.countries,
-    "TotalDeaths"
-  );
-
-  const highestCountriesByTotalRecoveries = sortCountries(
-    state.countries,
-    "TotalRecovered"
-  );
-
-  if (!state.global || !state.countries) return <div>loading...</div>;
+  if (!state.global || !state.countries || !state.selectedList)
+    return <div>loading...</div>;
 
   return (
     <div className="App">
@@ -99,8 +73,17 @@ function App() {
             data={state.selectedCountry}
           />
         ) : null}
-        {/* <MostNewConfirmed countries={highestCountriesByNewConfirmed} />
-        <MostNewDeaths countries={highestCountriesByNewDeaths} /> */}
+        <Selector
+          onChange={(list: string) => {
+            void update({ type: "selected list changed", selectedList: list });
+          }}
+          selectedList={["Cases", "Deaths", "Recovered"]}
+          value={state.selectedList}
+        />
+        <List
+          list={sortCountries(state.countries, getList(state.selectedList))}
+          key={getList(state.selectedList)}
+        />
       </AllData>
     </div>
   );

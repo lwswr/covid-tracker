@@ -1,12 +1,26 @@
 import * as React from "react";
-import { OptionsType } from "./state";
 
 export const Selector = ({
-  options,
+  selectedList,
   value,
   onChange,
 }: {
-  options: OptionsType;
+  selectedList: string[];
   value: string;
   onChange: (value: string) => void;
-}) => {};
+}) => {
+  return (
+    <select
+      value={value ?? selectedList}
+      onChange={(e) => onChange(e.target.value)}
+    >
+      {selectedList.map((option: string) => {
+        return (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        );
+      })}
+    </select>
+  );
+};

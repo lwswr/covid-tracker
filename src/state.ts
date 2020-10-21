@@ -2,15 +2,12 @@ import React from "react";
 import { DataResponse, Country, Global } from "./API";
 import produce from "immer";
 
-export const options = ["Cases", "Deaths", "Recoveries"] as const;
-export type OptionsType = typeof options[number];
-
 export type State = {
   countries: Country[];
   global: undefined | Global;
   search: string;
   selectedCountry: Country | undefined;
-  options: OptionsType;
+  selectedList: undefined | string;
 };
 
 export type Events =
@@ -23,8 +20,8 @@ export type Events =
       search: string;
     }
   | {
-      type: "options list changed";
-      options: OptionsType;
+      type: "selected list changed";
+      selectedList: string;
     };
 
 export const initialState = (): State => ({
@@ -32,7 +29,7 @@ export const initialState = (): State => ({
   global: undefined,
   search: "united kingdom",
   selectedCountry: undefined,
-  options: "Cases",
+  selectedList: "Cases",
 });
 
 export const reducer: React.Reducer<State, Events> = (state, event) =>
@@ -54,8 +51,8 @@ export const reducer: React.Reducer<State, Events> = (state, event) =>
         }
         break;
       }
-      case "options list changed": {
-        draft.options = event.options;
+      case "selected list changed": {
+        draft.selectedList = event.selectedList;
         break;
       }
     }
