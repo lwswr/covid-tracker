@@ -1,5 +1,11 @@
 import React from "react";
-import { DataResponse, Country, Global } from "./API";
+import {
+  DataResponse,
+  Country,
+  Global,
+  CountryStatus,
+  CountryStatusResponse,
+} from "./API";
 import produce from "immer";
 
 export type State = {
@@ -8,12 +14,17 @@ export type State = {
   search: string;
   selectedCountry: Country | undefined;
   selectedList: undefined | string;
+  countryStatus: undefined | CountryStatus[];
 };
 
 export type Events =
   | {
       type: "data fetched";
       data: DataResponse;
+    }
+  | {
+      type: "country status fetched";
+      data: CountryStatusResponse;
     }
   | {
       type: "search updated";
@@ -30,6 +41,7 @@ export const initialState = (): State => ({
   search: "united kingdom",
   selectedCountry: undefined,
   selectedList: "Cases",
+  countryStatus: undefined,
 });
 
 export const reducer: React.Reducer<State, Events> = (state, event) =>
@@ -38,6 +50,10 @@ export const reducer: React.Reducer<State, Events> = (state, event) =>
       case "data fetched": {
         draft.countries = event.data.Countries;
         draft.global = event.data.Global;
+        break;
+      }
+      case "country status fetched": {
+        draft.countryStatus = event.data;
         break;
       }
       case "search updated": {

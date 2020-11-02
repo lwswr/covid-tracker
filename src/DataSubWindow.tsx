@@ -7,7 +7,21 @@ const SubWindow = styled.div`
   justify-content: left;
   padding: 10px;
   width: 200px;
-  height: 200px;
+  height: 75px;
+  :nth-child(n + 2) {
+    border-left: 1px solid lightgrey;
+  }
+`;
+
+const Title = styled.div`
+  font-size: 15px;
+`;
+
+const Total = styled.div`
+  font-size: 25px;
+`;
+const Increase = styled.div`
+  font-size: 20px;
 `;
 
 export const DataSubWindow = ({
@@ -21,9 +35,11 @@ export const DataSubWindow = ({
 }) => {
   return (
     <SubWindow>
-      <h6>{title}</h6>
-      <h3>{total}</h3>
-      <h4>+{increase}</h4>
+      <Title>
+        <strong>{title}</strong>
+      </Title>
+      <Total>{total}</Total>
+      <Increase>+{increase}</Increase>
     </SubWindow>
   );
 };
