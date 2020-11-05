@@ -27,7 +27,6 @@ export type Country = {
   NewRecovered: number;
   TotalRecovered: number;
   Date: string;
-  [key: string]: string | number;
 };
 
 export type CountryStatus = {

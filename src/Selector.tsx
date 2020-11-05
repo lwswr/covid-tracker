@@ -1,20 +1,20 @@
 import * as React from "react";
 
-export const Selector = ({
+export function Selector<T extends string>({
   selectedList,
   value,
   onChange,
 }: {
-  selectedList: string[];
-  value: string;
-  onChange: (value: string) => void;
-}) => {
+  selectedList: Readonly<T[]>;
+  value: T;
+  onChange: (value: T) => void;
+}) {
   return (
     <select
       value={value ?? selectedList}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value as any)}
     >
-      {selectedList.map((option: string) => {
+      {selectedList.map((option) => {
         return (
           <option key={option} value={option}>
             {option}
@@ -23,4 +23,4 @@ export const Selector = ({
       })}
     </select>
   );
-};
+}

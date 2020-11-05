@@ -64,8 +64,8 @@ export const List = ({
   selectedList,
 }: {
   list: Country[];
-  displayKey: string;
-  secondaryDisplayKey: string;
+  displayKey: keyof Country;
+  secondaryDisplayKey: keyof Country;
   selectedList: string;
 }) => {
   return (
@@ -75,7 +75,6 @@ export const List = ({
         <TableHeaderOther>Total {selectedList}</TableHeaderOther>
         <TableHeaderOther>Increase in {selectedList}</TableHeaderOther>
       </TableColumn>
-
       {list.map((item, index) => {
         return (
           <TableColumn key={index}>

@@ -8,12 +8,15 @@ import {
 } from "./API";
 import produce from "immer";
 
+export const listOptions = ["Deaths", "Cases", "Recovered"] as const;
+export type ListOption = typeof listOptions[number];
+
 export type State = {
   countries: Country[];
   global: undefined | Global;
   search: string;
   selectedCountry: Country | undefined;
-  selectedList: undefined | string;
+  selectedList?: ListOption;
   countryStatus: undefined | CountryStatus[];
 };
 
@@ -32,7 +35,7 @@ export type Events =
     }
   | {
       type: "selected list changed";
-      selectedList: string;
+      selectedList: ListOption;
     };
 
 export const initialState = (): State => ({

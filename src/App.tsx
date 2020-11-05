@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { initialState, reducer } from "./state";
+import { initialState, listOptions, reducer } from "./state";
 import {
   getData,
   DataResponse,
@@ -12,6 +12,7 @@ import { SearchForm } from "./SearchForm";
 import { DataWindow } from "./DataWindow";
 import { Selector } from "./Selector";
 import { List } from "./List";
+import { unreachable } from "./tsHelpers";
 
 const AllData = styled.div`
   display: flex;
@@ -30,6 +31,9 @@ const Title = styled.div`
   font-size: 25px;
   margin: 5px;
 `;
+
+type DisplayKey = "TotalDeaths" | "TotalConfirmed" | "TotalRecovered";
+type SecondaryDisplayKey = "NewDeaths" | "NewConfirmed" | "NewRecovered";
 
 function App() {
   const [state, update] = React.useReducer(reducer, initialState());
@@ -64,10 +68,7 @@ function App() {
   }, [state.search]);
 
   // Takes sorting parameter as string allowing for one function to sort all
-  const sortCountries = (
-    countries: Country[],
-    key: "TotalDeaths" | "TotalConfirmed" | "TotalRecovered"
-  ) => {
+  const sortCountries = (countries: Country[], key: DisplayKey) => {
     return countries
       .slice(0)
       .sort((a, b) => {
@@ -76,26 +77,27 @@ function App() {
       .slice(0, 10);
   };
 
-  // Two functions doing the same thing, could returned values be passed in as a string?
-  // Also probably a much cleaner way to consdense these.
-
-  const getDisplayKey = (selectedList: string) => {
-    if (selectedList === "Cases") {
-      return "TotalConfirmed";
-    } else if (selectedList === "Deaths") {
-      return "TotalDeaths";
+  const [displayKey, secondaryDisplayKey] = React.useMemo(():
+    | [DisplayKey, SecondaryDisplayKey]
+    | [undefined, undefined] => {
+    if (state.selectedList) {
+      switch (state.selectedList) {
+        case "Cases": {
+          return ["TotalConfirmed", "NewConfirmed"];
+        }
+        case "Deaths": {
+          return ["TotalDeaths", "NewDeaths"];
+        }
+        case "Recovered": {
+          return ["TotalRecovered", "NewRecovered"];
+        }
+        default: {
+          unreachable(state.selectedList);
+        }
+      }
     }
-    return "TotalRecovered";
-  };
-
-  const getSecondaryDisplayKey = (selectedList: string) => {
-    if (selectedList === "Cases") {
-      return "NewConfirmed";
-    } else if (selectedList === "Deaths") {
-      return "NewDeaths";
-    }
-    return "NewRecovered";
-  };
+    return [undefined, undefined];
+  }, [state.selectedList]);
 
   if (
     !state.global ||
@@ -104,8 +106,6 @@ function App() {
     !state.countryStatus
   )
     return <div>loading...</div>;
-
-  console.log(state.countryStatus);
 
   return (
     <div className="App">
@@ -129,20 +129,17 @@ function App() {
           ) : null}
         </CasesOverview>
         <Selector
-          onChange={(list: string) => {
+          onChange={(list) => {
             void update({ type: "selected list changed", selectedList: list });
           }}
-          selectedList={["Cases", "Deaths", "Recovered"]}
+          selectedList={listOptions}
           value={state.selectedList}
         />
         <List
-          list={sortCountries(
-            state.countries,
-            getDisplayKey(state.selectedList)
-          )}
+          list={sortCountries(state.countries, displayKey!)}
           selectedList={state.selectedList}
-          displayKey={getDisplayKey(state.selectedList)}
-          secondaryDisplayKey={getSecondaryDisplayKey(state.selectedList)}
+          displayKey={displayKey!}
+          secondaryDisplayKey={secondaryDisplayKey!}
         />
       </AllData>
     </div>
