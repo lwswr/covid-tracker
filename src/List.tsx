@@ -1,15 +1,14 @@
 import * as React from "react";
 import { Country } from "./API";
 import styled from "styled-components";
+import { ListOption } from "./state";
+import { motion } from "framer-motion";
 
-const Table = styled.div`
+const Table = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: left;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid grey;
-  border-radius: 15px;
+  width: 100%;
 `;
 
 const TableColumn = styled.div`
@@ -26,7 +25,7 @@ const TableHeaderCountry = styled.div`
   justify-content: flex-start;
   font-size: 15px;
   padding-right: 10px;
-  width: 200px;
+  width: 33%;
 `;
 
 const TableHeaderOther = styled.div`
@@ -34,27 +33,27 @@ const TableHeaderOther = styled.div`
   justify-content: flex-end;
   font-size: 15px;
   padding-right: 10px;
-  width: 200px;
+  width: 33%;
 `;
 
 const TableCountry = styled.div`
   font-size: 15px;
   padding-right: 10px;
-  width: 200px;
+  width: 33%;
 `;
 const TableTotal = styled.div`
   display: flex;
   justify-content: flex-end;
   font-size: 15px;
   padding-right: 10px;
-  width: 200px;
+  width: 33%;
 `;
 const TableIncrease = styled.div`
   display: flex;
   justify-content: flex-end;
   font-size: 15px;
   padding-right: 10px;
-  width: 200px;
+  width: 33%;
 `;
 
 export const List = ({
@@ -66,7 +65,7 @@ export const List = ({
   list: Country[];
   displayKey: keyof Country;
   secondaryDisplayKey: keyof Country;
-  selectedList: string;
+  selectedList: ListOption;
 }) => {
   return (
     <Table>

@@ -1,4 +1,18 @@
 import * as React from "react";
+import styled from "styled-components";
+
+const Select = styled.select`
+  font-size: 25px;
+  border: 0;
+  border-bottom: 1px solid white;
+  background: white;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  transition: 0.2s;
+  :hover {
+    border-bottom: 1px solid grey;
+  }
+`;
 
 export function Selector<T extends string>({
   selectedList,
@@ -10,7 +24,7 @@ export function Selector<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <select
+    <Select
       value={value ?? selectedList}
       onChange={(e) => onChange(e.target.value as any)}
     >
@@ -21,6 +35,6 @@ export function Selector<T extends string>({
           </option>
         );
       })}
-    </select>
+    </Select>
   );
 }

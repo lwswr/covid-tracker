@@ -2,8 +2,9 @@ import * as React from "react";
 import { Country, Global } from "./API";
 import styled from "styled-components";
 import { DataSubWindow } from "./DataSubWindow";
+import { motion } from "framer-motion";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -11,7 +12,7 @@ const Container = styled.div`
   margin-bottom: 10px;
 `;
 
-const DataWindowCon = styled.div`
+const DataWindowCon = styled(motion.div)`
   display: flex;
   flex-direction: row;
 `;

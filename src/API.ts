@@ -1,11 +1,10 @@
 import axios from "axios";
 
-export type DataResponse = {
-  Global: Global | undefined;
+// Types from getSummaryData
+export type SummaryResponse = {
+  Global?: Global;
   Countries: Country[];
 };
-
-export type CountryStatusResponse = CountryStatus[];
 
 export type Global = {
   NewConfirmed: number;
@@ -29,7 +28,9 @@ export type Country = {
   Date: string;
 };
 
-export type CountryStatus = {
+export type StatusResponse = Status[];
+
+export type Status = {
   Country: string;
   CountryCode: string;
   Province: string;
@@ -42,15 +43,15 @@ export type CountryStatus = {
   Date: string;
 };
 
-export const getData = async () => {
-  const response = await axios.get<DataResponse>(
+export const getSummaryData = async () => {
+  const response = await axios.get<SummaryResponse>(
     `https://api.covid19api.com/summary`
   );
   return response.data;
 };
 
 export const getStatusData = async (country: string | undefined) => {
-  const response = await axios.get<CountryStatusResponse>(
+  const response = await axios.get<StatusResponse>(
     `https://api.covid19api.com/total/dayone/country/${country}/status/confirmed`
   );
   return response.data;

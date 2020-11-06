@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { initialState, listOptions, reducer } from "./state";
 import {
-  getData,
-  DataResponse,
+  getSummaryData,
+  SummaryResponse,
   Country,
-  CountryStatusResponse,
+  StatusResponse,
   getStatusData,
 } from "./API";
 import { SearchForm } from "./SearchForm";
@@ -13,23 +13,47 @@ import { DataWindow } from "./DataWindow";
 import { Selector } from "./Selector";
 import { List } from "./List";
 import { unreachable } from "./tsHelpers";
+import { motion, AnimatePresence } from "framer-motion";
 
-const AllData = styled.div`
+const AllData = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: auto;
   padding-top: 20px;
+  width: 60%;
 `;
 
-const CasesOverview = styled.div`
+const CasesOverview = styled(motion.div)`
   border: 1px solid grey;
   border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 10px;
+  align-content: stretch;
+  width: 70%;
 `;
 
-const Title = styled.div`
+const Title = styled(motion.div)`
   font-size: 25px;
   margin: 5px;
+`;
+
+const CasesOverviewTitleAndForm = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ListAndSelector = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  border: 1px solid grey;
+  padding: 30px;
+  margin: 10px 0px;
+  border-radius: 15px;
 `;
 
 type DisplayKey = "TotalDeaths" | "TotalConfirmed" | "TotalRecovered";
@@ -40,31 +64,29 @@ function App() {
 
   // getCovidData runs once upon mounting
   useEffect(() => {
-    async function getCovidData() {
+    async function getSummary() {
       try {
-        const covidResponse: DataResponse = await getData();
-        update({ type: "data fetched", data: covidResponse });
-        update({ type: "search updated", search: "united kingdom" });
+        const summaryResponse: SummaryResponse = await getSummaryData();
+        update({ type: "data fetched", data: summaryResponse });
+        update({ type: "search updated", search: "United Kingdom" });
       } catch (error) {
         console.log(error);
       }
     }
-    getCovidData();
+    getSummary();
   }, []);
 
   // getCountryStatusData runs when state.search is updated
   useEffect(() => {
-    async function getCountryStatusData(country: string | undefined) {
+    async function getStatus(country: string | undefined) {
       try {
-        const countryStatusResponse: CountryStatusResponse = await getStatusData(
-          country
-        );
-        update({ type: "country status fetched", data: countryStatusResponse });
+        const statusResponse: StatusResponse = await getStatusData(country);
+        update({ type: "country status fetched", data: statusResponse });
       } catch (error) {
         console.log(error);
       }
     }
-    if (state.search) getCountryStatusData(state.search);
+    if (state.search) getStatus(state.search);
   }, [state.search]);
 
   // Takes sorting parameter as string allowing for one function to sort all
@@ -77,6 +99,7 @@ function App() {
       .slice(0, 10);
   };
 
+  //
   const [displayKey, secondaryDisplayKey] = React.useMemo(():
     | [DisplayKey, SecondaryDisplayKey]
     | [undefined, undefined] => {
@@ -109,39 +132,63 @@ function App() {
 
   return (
     <div className="App">
-      <AllData>
-        <SearchForm
-          submit={(search) =>
-            void update({ type: "search updated", search: search })
-          }
-        />
-        <CasesOverview>
-          <Title>Cases Overview</Title>
+      <AnimatePresence>
+        <AllData
+          initial={{ opacity: 0 }}
+          exit={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <CasesOverview
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, x: "-100px" }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ease: "easeOut", duration: 2 }}
+          >
+            <CasesOverviewTitleAndForm>
+              <Title>Cases Overview</Title>
+              <SearchForm
+                submit={(search) =>
+                  void update({ type: "search updated", search: search })
+                }
+              />
+            </CasesOverviewTitleAndForm>
 
-          {state.global ? (
-            <DataWindow title={"Global"} data={state.global} />
-          ) : null}
-          {state.selectedCountry ? (
-            <DataWindow
-              title={state.selectedCountry?.Country}
-              data={state.selectedCountry}
+            {state.global ? (
+              <DataWindow title={"Global"} data={state.global} />
+            ) : null}
+            {state.selectedCountry ? (
+              <DataWindow
+                title={state.selectedCountry?.Country}
+                data={state.selectedCountry}
+              />
+            ) : null}
+          </CasesOverview>
+
+          <ListAndSelector
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, x: "100px" }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1, ease: "easeOut", duration: 2 }}
+          >
+            <Selector
+              onChange={(list) => {
+                void update({
+                  type: "selected list changed",
+                  selectedList: list,
+                });
+              }}
+              selectedList={listOptions}
+              value={state.selectedList}
             />
-          ) : null}
-        </CasesOverview>
-        <Selector
-          onChange={(list) => {
-            void update({ type: "selected list changed", selectedList: list });
-          }}
-          selectedList={listOptions}
-          value={state.selectedList}
-        />
-        <List
-          list={sortCountries(state.countries, displayKey!)}
-          selectedList={state.selectedList}
-          displayKey={displayKey!}
-          secondaryDisplayKey={secondaryDisplayKey!}
-        />
-      </AllData>
+            <List
+              list={sortCountries(state.countries, displayKey!)}
+              selectedList={state.selectedList}
+              displayKey={displayKey!}
+              secondaryDisplayKey={secondaryDisplayKey!}
+            />
+          </ListAndSelector>
+        </AllData>
+      </AnimatePresence>
     </div>
   );
 }

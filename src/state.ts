@@ -1,10 +1,10 @@
 import React from "react";
 import {
-  DataResponse,
+  SummaryResponse,
   Country,
   Global,
-  CountryStatus,
-  CountryStatusResponse,
+  Status,
+  StatusResponse,
 } from "./API";
 import produce from "immer";
 
@@ -13,21 +13,21 @@ export type ListOption = typeof listOptions[number];
 
 export type State = {
   countries: Country[];
-  global: undefined | Global;
+  global?: Global;
   search: string;
-  selectedCountry: Country | undefined;
+  selectedCountry?: Country;
   selectedList?: ListOption;
-  countryStatus: undefined | CountryStatus[];
+  countryStatus?: Status[];
 };
 
 export type Events =
   | {
       type: "data fetched";
-      data: DataResponse;
+      data: SummaryResponse;
     }
   | {
       type: "country status fetched";
-      data: CountryStatusResponse;
+      data: StatusResponse;
     }
   | {
       type: "search updated";
@@ -41,7 +41,7 @@ export type Events =
 export const initialState = (): State => ({
   countries: [],
   global: undefined,
-  search: "united kingdom",
+  search: "United Kingdom",
   selectedCountry: undefined,
   selectedList: "Cases",
   countryStatus: undefined,

@@ -5,8 +5,8 @@ const SubWindow = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: left;
-  padding: 10px;
-  width: 200px;
+  padding: 10px 10px 10px 30px;
+  width: 33%;
   height: 75px;
   :nth-child(n + 2) {
     border-left: 1px solid lightgrey;
