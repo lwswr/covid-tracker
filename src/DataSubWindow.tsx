@@ -25,18 +25,18 @@ const Increase = styled.div`
 `;
 
 export const DataSubWindow = ({
-  title,
+  subTitle,
   total,
   increase,
 }: {
-  title: string;
+  subTitle: string;
   total: number | undefined;
   increase: number | undefined;
 }) => {
   return (
     <SubWindow>
       <Title>
-        <strong>{title}</strong>
+        <strong>{subTitle}</strong>
       </Title>
       <Total>{total}</Total>
       <Increase>+{increase}</Increase>

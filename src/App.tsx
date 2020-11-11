@@ -9,11 +9,12 @@ import {
   getStatusData,
 } from "./API";
 import { SearchForm } from "./SearchForm";
-import { DataWindow } from "./DataWindow";
+import { Overview } from "./Overview";
 import { Selector } from "./Selector";
 import { List } from "./List";
 import { unreachable } from "./tsHelpers";
 import { motion, AnimatePresence } from "framer-motion";
+import { Graph } from "./Graph";
 
 const AllData = styled(motion.div)`
   display: flex;
@@ -24,16 +25,27 @@ const AllData = styled(motion.div)`
   width: 60%;
 `;
 
-const CasesOverview = styled(motion.div)`
+const Title = styled(motion.div)`
+  display: flex;
   border: 1px solid grey;
   border-radius: 15px;
   padding: 30px;
   margin-bottom: 10px;
+  width: 70%;
+  font-size: 35px;
+  letter-spacing: 4px;
+`;
+
+const OverviewWindow = styled(motion.div)`
+  border: 1px solid grey;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 5px;
   align-content: stretch;
   width: 70%;
 `;
 
-const Title = styled(motion.div)`
+const OverviewTitle = styled(motion.div)`
   font-size: 25px;
   margin: 5px;
 `;
@@ -52,7 +64,7 @@ const ListAndSelector = styled(motion.div)`
   width: 70%;
   border: 1px solid grey;
   padding: 30px;
-  margin: 10px 0px;
+  margin: 5px 0px;
   border-radius: 15px;
 `;
 
@@ -61,6 +73,7 @@ type SecondaryDisplayKey = "NewDeaths" | "NewConfirmed" | "NewRecovered";
 
 function App() {
   const [state, update] = React.useReducer(reducer, initialState());
+  const subTitleOptions: string[] = ["Cases", "Deaths", "Recovered"];
 
   // getCovidData runs once upon mounting
   useEffect(() => {
@@ -68,7 +81,7 @@ function App() {
       try {
         const summaryResponse: SummaryResponse = await getSummaryData();
         update({ type: "data fetched", data: summaryResponse });
-        update({ type: "search updated", search: "United Kingdom" });
+        update({ type: "search updated", search: "India" });
       } catch (error) {
         console.log(error);
       }
@@ -133,19 +146,23 @@ function App() {
   return (
     <div className="App">
       <AnimatePresence>
-        <AllData
-          initial={{ opacity: 0 }}
-          exit={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <CasesOverview
+        <AllData>
+          <Title
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: "-20px" }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ease: "easeOut", duration: 2 }}
+          >
+            COVID-19 TRACKER
+          </Title>
+          <OverviewWindow
             exit={{ opacity: 0 }}
             initial={{ opacity: 0, x: "-100px" }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ ease: "easeOut", duration: 2 }}
           >
             <CasesOverviewTitleAndForm>
-              <Title>Cases Overview</Title>
+              <OverviewTitle>COVID-19 Overview</OverviewTitle>
               <SearchForm
                 submit={(search) =>
                   void update({ type: "search updated", search: search })
@@ -154,21 +171,26 @@ function App() {
             </CasesOverviewTitleAndForm>
 
             {state.global ? (
-              <DataWindow title={"Global"} data={state.global} />
+              <Overview
+                title={"Global"}
+                subTitles={subTitleOptions}
+                data={state.global}
+              />
             ) : null}
             {state.selectedCountry ? (
-              <DataWindow
+              <Overview
                 title={state.selectedCountry?.Country}
+                subTitles={subTitleOptions}
                 data={state.selectedCountry}
               />
             ) : null}
-          </CasesOverview>
+          </OverviewWindow>
 
           <ListAndSelector
             exit={{ opacity: 0 }}
             initial={{ opacity: 0, x: "100px" }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1, ease: "easeOut", duration: 2 }}
+            transition={{ ease: "easeOut", duration: 2 }}
           >
             <Selector
               onChange={(list) => {
@@ -187,6 +209,7 @@ function App() {
               secondaryDisplayKey={secondaryDisplayKey!}
             />
           </ListAndSelector>
+          <Graph chartData={state.countryStatus} />
         </AllData>
       </AnimatePresence>
     </div>

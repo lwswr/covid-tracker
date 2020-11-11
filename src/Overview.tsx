@@ -17,13 +17,13 @@ const DataWindowCon = styled(motion.div)`
   flex-direction: row;
 `;
 
-const titles: string[] = ["Cases", "Deaths", "Recoveries"];
-
-export const DataWindow = ({
+export const Overview = ({
   title,
+  subTitles,
   data,
 }: {
   title: string | undefined;
+  subTitles: string[];
   data: Country | Global | undefined;
 }) => {
   return (
@@ -31,17 +31,17 @@ export const DataWindow = ({
       <h2>{title}</h2>
       <DataWindowCon>
         <DataSubWindow
-          title={titles[0]}
+          subTitle={subTitles[0]}
           total={data?.TotalConfirmed}
           increase={data?.NewConfirmed}
         />
         <DataSubWindow
-          title={titles[1]}
+          subTitle={subTitles[1]}
           total={data?.TotalDeaths}
           increase={data?.NewDeaths}
         />
         <DataSubWindow
-          title={titles[2]}
+          subTitle={subTitles[2]}
           total={data?.TotalRecovered}
           increase={data?.NewRecovered}
         />
