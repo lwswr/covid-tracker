@@ -28,7 +28,7 @@ export const Graph = ({ chartData }: { chartData: StatusResponse }) => {
           labels: dates,
           datasets: [
             {
-              label: "Cases",
+              label: chartData[0].Country,
               data: newData,
             },
           ],
