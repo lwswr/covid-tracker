@@ -3,6 +3,12 @@ import { Line } from "react-chartjs-2";
 import { StatusResponse } from "./API";
 import styled from "styled-components";
 import { ListOption } from "./state";
+import { useMemo } from "react";
+
+type GraphDimensions = {
+  height: number;
+  width: number;
+};
 
 const GraphWindow = styled.div`
   display: flex;
@@ -41,11 +47,18 @@ export const Graph = ({
   chartData: StatusResponse;
   listChoice: ListOption;
 }) => {
-  const graphDates: string[] = chartData.map((datum) => datum.Date);
+  const graphDates: string[] = useMemo(
+    () => chartData.map((datum) => datum.Date),
+    [chartData]
+  );
   const graphData: number[] = getDifference(
     chartData.map((datum) => datum[checkForListType(listChoice)])
   );
   const graphLabel: string = chartData[0].Country + " New " + listChoice;
+  const graphDimensions: GraphDimensions = {
+    height: 500,
+    width: 800,
+  };
 
   return (
     <GraphWindow>
@@ -61,8 +74,8 @@ export const Graph = ({
             },
           ],
         }}
-        height={500}
-        width={800}
+        height={graphDimensions.height}
+        width={graphDimensions.width}
         options={{
           scales: {
             yAxes: [
