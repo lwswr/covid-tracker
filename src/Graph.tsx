@@ -1,9 +1,19 @@
 import * as React from "react";
 import { Line } from "react-chartjs-2";
 import { StatusResponse } from "./API";
+import styled from "styled-components";
+import { ListOption } from "./state";
 
-export type DataType = number[];
-export type DatesType = string[];
+const GraphWindow = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+  border: 1px solid grey;
+  padding: 30px;
+  margin: 5px 0px;
+  border-radius: 15px;
+`;
 
 function getDifference(arr: number[]) {
   let newArr: number[] = [];
@@ -15,21 +25,36 @@ function getDifference(arr: number[]) {
   return newArr;
 }
 
-export const Graph = ({ chartData }: { chartData: StatusResponse }) => {
-  const dates: DatesType = chartData.map((datum) => datum.Date);
-  const data: DataType = chartData.map((datum) => datum.Cases);
+function checkForListType(item: ListOption) {
+  if (item === "Cases") {
+    return "Confirmed";
+  } else if (item === "Deaths") {
+    return item;
+  }
+  return item;
+}
 
-  const newData: DataType = getDifference(data);
+export const Graph = ({
+  chartData,
+  listChoice,
+}: {
+  chartData: StatusResponse;
+  listChoice: ListOption;
+}) => {
+  const graphDates: string[] = chartData.map((datum) => datum.Date);
+  const graphData: number[] = getDifference(
+    chartData.map((datum) => datum[checkForListType(listChoice)])
+  );
 
   return (
-    <div>
+    <GraphWindow>
       <Line
         data={{
-          labels: dates,
+          labels: graphDates,
           datasets: [
             {
               label: chartData[0].Country,
-              data: newData,
+              data: graphData,
             },
           ],
         }}
@@ -44,9 +69,17 @@ export const Graph = ({ chartData }: { chartData: StatusResponse }) => {
                 },
               },
             ],
+            xAxes: [
+              {
+                type: "time",
+                time: {
+                  unit: "month",
+                },
+              },
+            ],
           },
         }}
       />
-    </div>
+    </GraphWindow>
   );
 };

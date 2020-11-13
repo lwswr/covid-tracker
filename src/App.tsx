@@ -209,7 +209,10 @@ function App() {
               secondaryDisplayKey={secondaryDisplayKey!}
             />
           </ListAndSelector>
-          <Graph chartData={state.countryStatus} />
+          <Graph
+            chartData={state.countryStatus}
+            listChoice={state.selectedList}
+          />
         </AllData>
       </AnimatePresence>
     </div>

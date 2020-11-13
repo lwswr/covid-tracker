@@ -38,7 +38,7 @@ export const SearchForm = ({
 }: {
   submit: (search: string) => void;
 }) => {
-  const [newSearch, setNewSearch] = React.useState("India");
+  const [newSearch, setNewSearch] = React.useState("");
   return (
     <Form
       onSubmit={(e) => {

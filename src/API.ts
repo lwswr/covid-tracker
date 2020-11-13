@@ -38,8 +38,9 @@ export type Status = {
   CityCode: string;
   Lat: string;
   Lon: string;
-  Cases: number;
-  Status: string;
+  Confirmed: number;
+  Deaths: number;
+  Recovered: number;
   Date: string;
 };
 
@@ -52,7 +53,7 @@ export const getSummaryData = async () => {
 
 export const getStatusData = async (country: string | undefined) => {
   const response = await axios.get<StatusResponse>(
-    `https://api.covid19api.com/total/dayone/country/${country}/status/confirmed`
+    `https://api.covid19api.com/total/dayone/country/${country}`
   );
   return response.data;
 };
