@@ -45,6 +45,7 @@ export const Graph = ({
   const graphData: number[] = getDifference(
     chartData.map((datum) => datum[checkForListType(listChoice)])
   );
+  const graphLabel: string = chartData[0].Country + " New " + listChoice;
 
   return (
     <GraphWindow>
@@ -53,7 +54,7 @@ export const Graph = ({
           labels: graphDates,
           datasets: [
             {
-              label: chartData[0].Country,
+              label: graphLabel,
               data: graphData,
             },
           ],
