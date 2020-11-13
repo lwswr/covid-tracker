@@ -34,6 +34,7 @@ const Title = styled(motion.div)`
   width: 70%;
   font-size: 35px;
   letter-spacing: 4px;
+  background: white;
 `;
 
 const OverviewWindow = styled(motion.div)`
@@ -43,6 +44,7 @@ const OverviewWindow = styled(motion.div)`
   margin-bottom: 5px;
   align-content: stretch;
   width: 70%;
+  background: white;
 `;
 
 const OverviewTitle = styled(motion.div)`
@@ -55,6 +57,7 @@ const CasesOverviewTitleAndForm = styled(motion.div)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background: white;
 `;
 
 const ListAndSelector = styled(motion.div)`
@@ -66,6 +69,7 @@ const ListAndSelector = styled(motion.div)`
   padding: 30px;
   margin: 5px 0px;
   border-radius: 15px;
+  background: white;
 `;
 
 type DisplayKey = "TotalDeaths" | "TotalConfirmed" | "TotalRecovered";

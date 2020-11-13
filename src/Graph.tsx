@@ -19,6 +19,7 @@ const GraphWindow = styled.div`
   padding: 30px;
   margin: 5px 0px;
   border-radius: 15px;
+  background: white;
 `;
 
 function getDifference(arr: number[]) {
