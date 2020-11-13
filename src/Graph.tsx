@@ -56,6 +56,8 @@ export const Graph = ({
             {
               label: graphLabel,
               data: graphData,
+              borderColor: "rgba(131, 154, 199, 0.8)",
+              backgroundColor: "rgba(131, 154, 199, 0.2)",
             },
           ],
         }}
